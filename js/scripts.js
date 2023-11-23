@@ -1,8 +1,9 @@
 function calcularPlanosDeSaude() {
     // Obter valores do formulário
-    const idade = parseInt(document.getElementById('idade').value);
-    const peso = parseInt(document.getElementById('peso').value);
-    const altura = parseInt(document.getElementById('altura').value);
+    var idade = parseInt(document.getElementById('idade').value);
+    var peso = parseInt(document.getElementById('peso').value);
+    var altura = parseInt(document.getElementById('altura').value);
+    var imc = calcularIMC(peso, altura);
 
     // Verificar se todos os campos foram preenchidos
     if (!verificarCamposPreenchidos(idade, peso, altura)) {
@@ -10,35 +11,33 @@ function calcularPlanosDeSaude() {
         return;
     }
 
-    const imc = calcularIMC(peso, altura);
-
     // Calcular preços para Operadora A
-    const aBasico = 100 + (idade * 10 * (imc / 10));
-    const aPadrao = (150 + (idade * 15)) * (imc / 10);
-    const aPremium = (200 - (imc * 10) + (idade * 20)) * (1 + imc / 10);
+    var aBasico = 100 + (idade * 10 * (imc / 10));
+    var aPadrao = (150 + (idade * 15)) * (imc / 10);
+    var aPremium = (200 - (imc * 10) + (idade * 20)) * (imc / 10);
 
     // Calcular fator de comorbidade para Operadora B
-    const fatorComorbidade = calcularFatorComorbidade(imc);
+    var fatorComorbidade = calcularFatorComorbidade(imc);
 
     // Calcular preços para Operadora B
-    const bBasico = 100 + (fatorComorbidade * 10 * (imc / 10));
-    const bPadrao = (150 + (fatorComorbidade * 15)) * (imc / 10);
-    const bPremium = (200 - (imc * 10) + (fatorComorbidade * 20)) * (1 + imc / 10);
+    var bBasico = 100 + (fatorComorbidade * 10 * (imc / 10));
+    var bPadrao = (150 + (fatorComorbidade * 15)) * (imc / 10);
+    var bPremium = (200 - (imc * 10) + (fatorComorbidade * 20)) * ( imc / 10);
 
     // Exibir resultados em uma tabela
     var tabelaResultado = '<table class="table">';
     tabelaResultado += '<thead><tr><th>Plano</th><th>Operadora A</th><th>Operadora B</th></tr></thead>';
     tabelaResultado += '<tbody>';
-    tabelaResultado += '<tr><td>Básico</td><td>' + aBasico.toFixed(2) + '</td><td>' + bBasico.toFixed(2) + '</td></tr>';
-    tabelaResultado += '<tr><td>Padrão</td><td>' + aPadrao.toFixed(2) + '</td><td>' + bPadrao.toFixed(2) + '</td></tr>';
-    tabelaResultado += '<tr><td>Premium</td><td>' + aPremium.toFixed(2) + '</td><td>' + bPremium.toFixed(2) + '</td></tr>';
+    tabelaResultado += '<tr><td>Básico</td><td>R$ ' + aBasico.toFixed(2).replace('.', ',') + '</td><td>R$ ' + bBasico.toFixed(2).replace('.', ',') + '</td></tr>';
+    tabelaResultado += '<tr><td>Padrão</td><td>R$ ' + aPadrao.toFixed(2).replace('.', ',') + '</td><td>R$ ' + bPadrao.toFixed(2).replace('.', ',') + '</td></tr>';
+    tabelaResultado += '<tr><td>Premium</td><td>R$ ' + aPremium.toFixed(2).replace('.', ',') + '</td><td>R$ ' + bPremium.toFixed(2).replace('.', ',') + '</td></tr>';
     tabelaResultado += '</tbody></table>';
 
     document.getElementById('result').innerHTML = tabelaResultado;
 }
 
 function calcularIMC(peso, altura) {
-    const alturaEmMetros = altura / 100;
+    var alturaEmMetros = altura / 100;
     return peso / (alturaEmMetros * alturaEmMetros);
 }
 
